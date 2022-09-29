@@ -26,6 +26,7 @@ class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 class QuestionAnswerCreateListView(ListCreateAPIView):
     queryset = QuestionAnswer.objects.all()
+    QuestionAnswer.objects.order_by('importance').value(100, 0)
     serializer_class = QuestionAnswerSerializer
 
     def perform_create(self, serializer):
