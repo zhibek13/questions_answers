@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db import IntegrityError
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, \
     get_object_or_404
 from rest_framework.viewsets import ModelViewSet
@@ -26,8 +27,13 @@ class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 class QuestionAnswerCreateListView(ListCreateAPIView):
     queryset = QuestionAnswer.objects.all()
-    QuestionAnswer.objects.order_by('importance').value(100, 0)
     serializer_class = QuestionAnswerSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['category', 'question']
+
+    def get_queryset(self):
+        queryset = QuestionAnswer.objects.order_by('-importance')
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(name=self.request.name)

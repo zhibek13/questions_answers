@@ -13,7 +13,9 @@ class QuestionAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionAnswer
         fields = '__all__'
-        read_only_fields = ("answer", )
+        extra_kwargs = {
+            'answer': {'write_only': True},
+        }
 
 
 class QuestionsAnswersSerializer(serializers.ModelSerializer):
